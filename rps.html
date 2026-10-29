@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors - Melo</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;background:#0f0f0f;color:#fff;min-height:100vh;margin:0;display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:24px;padding:30px;max-width:400px;width:100%;text-align:center}
+h1{margin:0 0 8px;font-size:24px}
+.sub{color:#999;font-size:14px;margin-bottom:24px}
+.choices{display:flex;gap:12px;justify-content:center;margin:20px 0}
+.choice{width:90px;height:90px;background:#222;border:2px solid #333;border-radius:18px;font-size:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.choice:hover{transform:scale(1.08);border-color:#fff;background:#2a2a2a}
+.score{display:flex;justify-content:space-between;background:#111;padding:14px 18px;border-radius:14px;border:1px solid #222;margin:18px 0}
+.result{font-size:18px;font-weight:700;min-height:28px;margin:16px 0}
+.vs{font-size:13px;color:#999;margin:10px 0}
+.emoji-big{font-size:50px;margin:10px}
+.btn{background:#fff;color:#000;border:0;padding:12px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-top:10px;width:100%}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Rock Paper Scissors</h1>
+  <div class="sub">First to 5 wins — can you beat me? 😏</div>
+ 
+  <div class="score">
+    <div>You: <b id="playerScore">0</b></div>
+    <div>Me: <b id="botScore">0</b></div>
+  </div>
+
+  <div class="choices">
+    <div class="choice" onclick="play('rock')">🪨</div>
+    <div class="choice" onclick="play('paper')">📄</div>
+    <div class="choice" onclick="play('scissors')">✂️</div>
+  </div>
+  <div style="color:#999;font-size:12px">Rock • Paper • Scissors</div>
+
+  <div class="vs" id="vsText"></div>
+  <div id="emojiDisplay"></div>
+  <div class="result" id="resultText">Choose one to start!</div>
+ 
+  <button class="btn" onclick="resetGame()">Reset Game</button>
+</div>
+
+<script>
+let pScore = 0, bScore = 0;
+const options = ['rock','paper','scissors'];
+const emojis = {rock:'🪨',paper:'📄',scissors:'✂️'};
+
+function play(player){
+  const bot = options[Math.floor(Math.random()*3)];
+  let result = '';
+ 
+  if(player === bot){
+    result = "It's a tie! 😐";
+  } else if(
+    (player==='rock' && bot==='scissors') ||
+    (player==='paper' && bot==='rock') ||
+    (player==='scissors' && bot==='paper')
+  ){
+    pScore++;
+    result = "You won this round! 🔥";
+  } else {
+    bScore++;
+    result = "I won this round! 😏";
+  }
+
+  document.getElementById('playerScore').innerText = pScore;
+  document.getElementById('botScore').innerText = bScore;
+  document.getElementById('vsText').innerText = `You: ${player} vs Me: ${bot}`;
+  document.getElementById('emojiDisplay').innerHTML = `<div class="emoji-big">${emojis[player]} vs ${emojis[bot]}</div>`;
+  document.getElementById('resultText').innerText = result;
+
+  if(pScore===5 || bScore===5){
+    setTimeout(()=>{
+      if(pScore===5){
+        document.getElementById('resultText').innerHTML = "YOU BEAT ME! GG 😭🔥";
+      } else {
+        document.getElementById('resultText').innerHTML = "I WIN! You can't beat me 😂";
+      }
+    },200);
+  }
+}
+
+function resetGame(){
+  pScore=0; bScore=0;
+  document.getElementById('playerScore').innerText=0;
+  document.getElementById('botScore').innerText=0;
+  document.getElementById('resultText').innerText="Choose one to start!";
+  document.getElementById('vsText').innerText="";
+  document.getElementById('emojiDisplay').innerHTML="";
+}
+</script>
+</body>
+</html>
